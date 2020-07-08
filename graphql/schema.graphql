@@ -1,0 +1,5 @@
+#import scalars.graphql
+#import directives.graphql
+#import data/user.graphql
+#import data/post.graphql
+#import data/comment.graphql

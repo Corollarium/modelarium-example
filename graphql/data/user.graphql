@@ -1,0 +1,42 @@
+extend type Query {
+    users: [User!]! @paginate(defaultCount: 10)
+    user(id: ID @eq): User @find
+    me: User @auth
+}
+
+extend type Mutation {
+    createUser(input: UserInput! @spread): User!
+        @create
+        @can(ability: "create")
+        @event(dispatch: "App\\Events\\UserCreated")
+}
+
+type User
+    @migrationRememberToken
+    @migrationSoftDeletes
+    @migrationTimestamps
+    @modelExtends(class: "Illuminate\\Foundation\\Auth\\User")
+    @modelNotifiable {
+    id: ID!
+    name: String!
+        @modelFillable
+        @renderable(label: "Name", comment: "Please fill with your fullname")
+    password: String!
+        @modelHidden
+        @modelFillable
+    email_verified_at: Timestamp
+        @casts(type: "datetime")
+    email: Email!
+        @migrationUniqueIndex
+        @modelFillable
+    posts: [Post!]
+        @hasMany
+    comments: [Comment!]
+        @hasMany
+}
+
+input UserInput {
+    name: String!
+    password: String!
+    email: Email!
+}

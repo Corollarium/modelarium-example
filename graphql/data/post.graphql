@@ -1,0 +1,32 @@
+extend type Query {
+    posts: [Post!]! @paginate(defaultCount: 10)
+    post(id: ID @eq): Post @find
+}
+
+input CreatePostInput {
+    title: String!
+    content: String!
+}
+
+extend type Mutation {
+    createPost(input: CreatePostInput! @spread): Post! @create @can(ability: "create")
+    deletePost(id: ID!): Post @delete @can(ability: "delete", find: "id")
+}
+
+type Post @migrationTimestamps {
+    id: ID!
+    title: String! @modelFillable # @MinLength(value: 5) @MaxLength(value: 25)
+        @renderable(
+            label: "Title"
+            comment: "Please add a descriptive title"
+            placeholder: "Type here"
+            size: "large"
+        )
+    content: Text! @modelFillable # @MinLength(value: 15) @MaxLength(value: 1000)
+        @renderable(
+            label: "Content"
+            comment: "Your post contents"
+        )
+    user: User! @belongsTo @migrationForeign(onDelete: "cascade", onUpdate: "cascade")
+    comments: [Comment!]! @hasMany
+}
