@@ -1,0 +1,30 @@
+extend type Query {
+    sections: [Section!]! @paginate(defaultCount: 10)
+    section(id: ID @eq): Section @find
+}
+
+extend type Mutation {
+    upsertSection(input: SectionInput! @spread): Section! @upsert @can(ability: "upsert")
+    deleteSection(id: ID!): Section @delete @can(ability: "delete", find: "id")
+}
+
+input SectionInput {
+    id: ID
+    title: Title!
+}
+
+type Section
+    @migrationTimestamps {
+    id: ID!
+    title: Title! @modelFillable
+        @renderable(
+            title: true
+            label: "Title"
+            comment: "Please add a descriptive title"
+            placeholder: "Type here"
+            size: "large"
+            card: true
+            table: true
+        )
+    posts: [Post!] @hasMany
+}

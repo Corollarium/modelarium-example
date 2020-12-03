@@ -20,19 +20,24 @@ type User
     id: ID!
     name: String!
         @modelFillable
-        @renderable(label: "Name", comment: "Please fill with your fullname")
-    password: String!
-        @modelHidden
-        @modelFillable
-    email_verified_at: Timestamp
-        @casts(type: "datetime")
+        @renderable(
+            label: "Name"
+            comment: "Please fill with your fullname"
+            card: true
+            table: true
+        )
+    password: String! @modelHidden @modelFillable
+    email_verified_at: Timestamp @modelHidden @casts(type: "datetime")
     email: Email!
         @migrationUniqueIndex
         @modelFillable
-    posts: [Post!]
-        @hasMany
-    comments: [Comment!]
-        @hasMany
+        @renderable(
+            label: "Email"
+            comment: "Please fill with your email"
+        )
+    posts: [Post!] @hasMany
+    comments: [Comment!] @hasMany
+    can: [Can!]
 }
 
 input UserInput {

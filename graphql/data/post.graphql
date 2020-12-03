@@ -1,32 +1,54 @@
 extend type Query {
-    posts: [Post!]! @paginate(defaultCount: 10)
+    posts(title: String @where(operator: "like")): [Post!]! @paginate(defaultCount: 10)
     post(id: ID @eq): Post @find
 }
 
-input CreatePostInput {
-    title: String!
-    content: String!
-}
-
 extend type Mutation {
-    createPost(input: CreatePostInput! @spread): Post! @create @can(ability: "create")
+    upsertPost(input: PostInput! @spread): Post! @upsert @can(ability: "upsert")
     deletePost(id: ID!): Post @delete @can(ability: "delete", find: "id")
 }
 
-type Post @migrationTimestamps {
+input PostInput {
+    id: ID
+    title: Title!
+    content: String!
+}
+
+type Post
+    @migrationTimestamps {
     id: ID!
-    title: String! @modelFillable # @MinLength(value: 5) @MaxLength(value: 25)
+    title: Title! @modelFillable
         @renderable(
+            title: true
             label: "Title"
             comment: "Please add a descriptive title"
             placeholder: "Type here"
             size: "large"
+            card: true
+            table: true
         )
-    content: Text! @modelFillable # @MinLength(value: 15) @MaxLength(value: 1000)
+    content: Text! @modelFillable
         @renderable(
             label: "Content"
             comment: "Your post contents"
         )
-    user: User! @belongsTo @migrationForeign(onDelete: "cascade", onUpdate: "cascade")
-    comments: [Comment!]! @hasMany
+    user: User!
+        @belongsTo
+        @migrationForeign(onDelete: "cascade", onUpdate: "cascade")
+        @renderable(
+            show: true
+        )
+    section: Section!
+        @belongsTo
+        @modelFillable
+        @migrationForeign(onDelete: "cascade", onUpdate: "cascade")
+        @renderable(
+            label: "Section"
+            comment: "Choose the section this post belongs to"
+        )
+    comments: [Comment!]
+        @hasMany
+        @renderable(
+            show: true
+        )
 }

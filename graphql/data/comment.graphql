@@ -1,10 +1,23 @@
 extend type Mutation {
-    createComment(content: String!, post_id: ID!): Comment! @create @can(ability: "create")
+    createComment(content: String!, post_id: ID!): Comment!
+        @create
+        @can(ability: "create")
 }
 
 type Comment @migrationTimestamps {
     id: ID!
     content: String!
-    post: Post! @belongsTo @migrationForeign(onDelete: "cascade", onUpdate: "cascade")
-    user: User! @belongsTo @migrationForeign(onDelete: "cascade", onUpdate: "cascade")
+        @renderable(
+            title: true
+            label: "Content"
+            placeholder: "Type here"
+            card: true
+            table: true
+        )
+    post: Post!
+        @belongsTo
+        @migrationForeign(onDelete: "cascade", onUpdate: "cascade")
+    user: User!
+        @belongsTo
+        @migrationForeign(onDelete: "cascade", onUpdate: "cascade")
 }
