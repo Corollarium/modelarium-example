@@ -1,23 +1,29 @@
 {
-    "name": "laravel/laravel",
+    "name": "corollarium/modelarium-example",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Modelarium example project.",
     "keywords": [
-        "framework",
+        "modelarium",
+        "helloworld",
+        "web",
         "laravel"
     ],
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "corollarium/formularium": "^0.9",
+        "corollarium/modelarium": "^0.5",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^7.0",
-        "laravel/tinker": "^2.0"
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^2.1",
+        "mll-lab/laravel-graphql-playground": "^2.2",
+        "nuwave/lighthouse": "^5.3"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
-        "fzaninotto/faker": "^1.9.1",
         "mockery/mockery": "^1.3.1",
         "nunomaduro/collision": "^4.1",
         "phpunit/phpunit": "^8.5"
@@ -49,6 +55,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
+        "test": "./vendor/bin/phpunit --configuration phpunit.xml tests/",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
